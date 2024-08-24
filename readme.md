@@ -12,3 +12,11 @@
   Metodos que agregaria a cadeteria: Total recaudado jornal, Total de jornal a pagar.
 
   Metodos que agregaria a cadete: Pedidos a entregar, Pedidos Entregados, Borrar Pedidos.
+
+- Respuesta de la tercera pregunta:
+
+  Todos los atributos podrian ser privados pero por un tema de obtener los valores de los atributos los puse publico, para el id si lo hice privado ya que no interesa fuera del objeto saber de esa propiedad.
+
+- Respuesta de la cuarta pregunta:
+
+  Los constructores en general se los crea con sus atributos, pero en los de pedidos tambien se agregan con los atributos del cliente, ya que tienen una relacion por composicion.
