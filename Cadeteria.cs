@@ -5,7 +5,14 @@ namespace tp1.cadeteria
     class Cadeteria
     {
         private string Nombre;
-        private List<Cadete> Cadetes;
+        public List<Cadete> Cadetes;
         private string Telefono;
+
+        public Cadeteria(string nombre, string telefono)
+        {
+            Cadetes = new List<Cadete>();
+            Nombre = nombre;
+            Telefono = telefono;
+        }
     }
 }
