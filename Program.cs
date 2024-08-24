@@ -2,7 +2,7 @@
 using tp1.cliente;
 using tp1.pedido;
 
-class Program
+partial class Program
 {
     public static void Main()
     {

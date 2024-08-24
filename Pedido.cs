@@ -7,7 +7,7 @@ namespace tp1.pedido
         private string Numero;
         private string Observaciones;
         private Cliente Cliente;
-        private bool Estado;
+        public bool Estado;
 
         private Random random = new Random();
 
