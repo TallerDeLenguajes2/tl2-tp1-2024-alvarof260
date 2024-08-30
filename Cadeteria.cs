@@ -2,11 +2,11 @@ using tp1.cadete;
 
 namespace tp1.cadeteria
 {
-    class Cadeteria
+    public class Cadeteria
     {
-        private string Nombre;
+        public string Nombre;
         public List<Cadete> Cadetes;
-        private string Telefono;
+        public string Telefono;
 
         public Cadeteria(string nombre, string telefono)
         {

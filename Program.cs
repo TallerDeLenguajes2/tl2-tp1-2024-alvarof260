@@ -3,19 +3,37 @@ using tp1.cliente;
 using tp1.pedido;
 using tp1.cadete;
 using tp1.cadeteria;
+using tp1.data;
 
 partial class Program
 {
     public static void Main()
     {
-        Console.WriteLine("Hola. Por favor, ingrese el nombre de la Cadeteria: ");
-        string nombre = Console.ReadLine();
-        Console.WriteLine("Por favor, ingrese el telefono de la Cadeteria: ");
-        string telefono = Console.ReadLine();
+        string ruta = "cadeteria.csv";
+        string nombre;
+        string telefono;
+        Cadeteria cadeteria;
 
-        Cadeteria cadeteria = new Cadeteria(nombre, telefono);
+        if (!Archivos.Existe(ruta))
+        {
+            Console.WriteLine("Hola. Por favor, ingrese el nombre de la Cadeteria: ");
+            nombre = Console.ReadLine();
+            Console.WriteLine("Por favor, ingrese el telefono de la Cadeteria: ");
+            telefono = Console.ReadLine();
+            cadeteria = new Cadeteria(nombre, telefono);
+        }
 
-        Console.WriteLine(cadeteria.Cadetes.Count);
+        try
+        {
+            cadeteria = Archivos.ObtenerElPrimero(ruta);
+        }
+        catch (System.Exception)
+        {
+            Console.WriteLine("Pibe no tenes el archivo.");
+            throw;
+        }
+
+        Console.WriteLine(cadeteria.Nombre);
 
         Console.ReadKey();
         Console.Clear();

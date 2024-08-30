@@ -2,7 +2,7 @@ using tp1.pedido;
 
 namespace tp1.cadete
 {
-    class Cadete
+    public class Cadete
     {
         public string Id;
         public string Nombre;

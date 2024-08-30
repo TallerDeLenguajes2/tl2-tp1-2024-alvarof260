@@ -2,7 +2,7 @@ using tp1.cliente;
 
 namespace tp1.pedido
 {
-    class Pedido
+    public class Pedido
     {
         private string Numero;
         private string Observaciones;
