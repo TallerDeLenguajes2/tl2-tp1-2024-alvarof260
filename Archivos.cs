@@ -37,7 +37,7 @@ namespace tp1
             foreach (var linea in lineas)
             {
                 string[] datos = linea.Split(",");
-                Cadete cadete = new Cadete(datos[0], datos[1], datos[2]);
+                Cadete cadete = new Cadete(datos[0], datos[1], datos[2], new List<Pedido>());
                 lista.Add(cadete);
             }
             return lista;

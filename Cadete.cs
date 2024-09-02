@@ -22,5 +22,20 @@ namespace tp1
         {
             return random.Next(0, 10000).ToString();
         }
+
+        public string GetNombre()
+        {
+            return this.Nombre;
+        }
+
+        public void AsignarPedido(Pedido pedido)
+        {
+            this.Pedidos.Add(pedido);
+        }
+
+        public List<Pedido> GetPedidos()
+        {
+            return this.Pedidos;
+        }
     }
 }

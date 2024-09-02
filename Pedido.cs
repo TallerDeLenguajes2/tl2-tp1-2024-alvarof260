@@ -29,6 +29,24 @@ namespace tp1
         {
             return random.Next(0, 10000).ToString();
         }
+
+        public static Pedido DarDeAlta()
+        {
+            Console.WriteLine("Dar de alta un pedido");
+            Console.WriteLine("Escriba las observaciones del pedido");
+            string observaciones = Console.ReadLine();
+            Console.WriteLine("Escriba el nombre del cliente");
+            string nombre = Console.ReadLine();
+            Console.WriteLine("Escriba la direccion del cliente");
+            string direccion = Console.ReadLine();
+            Console.WriteLine("Escriba el telefono del cliente");
+            string telefono = Console.ReadLine();
+            Console.WriteLine("Escriba la referencia del cliente");
+            string referencia = Console.ReadLine();
+            Pedido pedido = new Pedido(observaciones, nombre, direccion, telefono, referencia);
+
+            return pedido;
+        }
     }
 }
 
