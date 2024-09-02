@@ -1,9 +1,4 @@
-using System.IO;
-using tp1.cadete;
-using tp1.cadeteria;
-
-
-namespace tp1.data
+namespace tp1
 {
 
     public class Archivos

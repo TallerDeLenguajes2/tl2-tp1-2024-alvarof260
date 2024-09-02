@@ -1,32 +1,26 @@
-using tp1.pedido;
-
-namespace tp1.cadete
+namespace tp1
 {
     public class Cadete
     {
-        public string Id;
-        public string Nombre;
-        public string Direccion;
-        public string Telefono;
-        public List<Pedido> Pedidos;
+        private string Id { get; set; }
+        private string Nombre { get; set; }
+        private string Direccion { get; set; }
+        private string Telefono { get; set; }
+        private List<Pedido> Pedidos { get; set; }
         private Random random = new Random();
 
-        public Cadete(string nombre, string direccion, string telefono)
+        public Cadete(string Nombre, string Direccion, string Telefono, List<Pedido> Pedidos)
         {
             Id = GenerarId();
-            Nombre = nombre;
-            Direccion = direccion;
-            Telefono = telefono;
-            Pedidos = new List<Pedido>();
+            this.Nombre = Nombre;
+            this.Direccion = Direccion;
+            this.Telefono = Telefono;
+            this.Pedidos = Pedidos;
         }
 
         public string GenerarId()
         {
             return random.Next(0, 10000).ToString();
-        }
-        public int JornalACobrar()
-        {
-            return Pedidos.Count(p => p.Estado == true) * 500;
         }
     }
 }

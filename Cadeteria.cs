@@ -1,18 +1,16 @@
-using tp1.cadete;
-
-namespace tp1.cadeteria
+namespace tp1
 {
     public class Cadeteria
     {
-        public string Nombre;
-        public List<Cadete> Cadetes;
-        public string Telefono;
+        private string Nombre { get; set; }
+        private string Telefono { get; set; }
+        private List<Cadete> Cadetes { get; set; }
 
-        public Cadeteria(string nombre, string telefono)
+        public Cadeteria(string Nombre, string Telefono, List<Cadete> Cadetes)
         {
-            Cadetes = new List<Cadete>();
-            Nombre = nombre;
-            Telefono = telefono;
+            this.Cadetes = Cadetes;
+            this.Nombre = Nombre;
+            this.Telefono = Telefono;
         }
     }
 }
