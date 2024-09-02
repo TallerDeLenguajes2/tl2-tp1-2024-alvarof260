@@ -28,6 +28,11 @@ namespace tp1
             return this.Nombre;
         }
 
+        public string GetId()
+        {
+            return this.Id;
+        }
+
         public void AsignarPedido(Pedido pedido)
         {
             this.Pedidos.Add(pedido);

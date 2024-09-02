@@ -16,6 +16,8 @@
 
             int op = 0;
             Pedido pedido = null;
+            List<Cadete> cadetes = null;
+            Cadete cadete = null;
             Random random = new Random();
 
             do
@@ -34,17 +36,58 @@
                         pedido = Pedido.DarDeAlta();
                         break;
                     case 2:
-                        List<Cadete> cadetes = cadeteria.GetCadetes();
+                        cadetes = cadeteria.GetCadetes();
                         cadetes[random.Next(0, cadetes.Count)].AsignarPedido(pedido);
                         Console.WriteLine("asignado");
                         pedido = null;
                         break;
                     case 3:
-
+                        cadetes = cadeteria.GetCadetes();
+                        foreach (var item in cadetes)
+                        {
+                            Console.WriteLine(item.GetId());
+                        }
+                        Console.WriteLine("Ingrese el numero de Cadete");
+                        string numCadete = Console.ReadLine();
+                        cadete = cadetes.Find(x => x.GetId() == numCadete);
+                        foreach (var item in cadete.GetPedidos())
+                        {
+                            Console.WriteLine(item.GetNumero());
+                        }
+                        Console.WriteLine("ingrese eL Numero de pedido");
+                        string numPedido = Console.ReadLine();
+                        foreach (var item in cadete.GetPedidos())
+                        {
+                            if (item.GetNumero() == numPedido)
+                            {
+                                item.CambiarEstado();
+                            }
+                        }
                         break;
                     case 4:
-                        break;
-                    case 5:
+                        cadetes = cadeteria.GetCadetes();
+                        foreach (var item in cadetes)
+                        {
+                            Console.WriteLine(item.GetId());
+                        }
+                        Console.WriteLine("Ingrese el numero de Cadete");
+                        numCadete = Console.ReadLine();
+                        cadete = cadetes.Find(x => x.GetId() == numCadete);
+                        foreach (var item in cadete.GetPedidos())
+                        {
+                            Console.WriteLine(item.GetNumero());
+                        }
+                        Console.WriteLine("ingrese eL Numero de pedido");
+                        numPedido = Console.ReadLine();
+                        foreach (var item in cadete.GetPedidos())
+                        {
+                            if (item.GetNumero() == numPedido)
+                            {
+                                pedido = item;
+                            }
+                        }
+                        cadetes[random.Next(0, cadetes.Count)].AsignarPedido(pedido);
+                        pedido = null;
                         break;
                     default:
                         break;

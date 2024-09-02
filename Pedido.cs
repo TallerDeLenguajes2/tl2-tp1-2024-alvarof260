@@ -47,6 +47,16 @@ namespace tp1
 
             return pedido;
         }
+
+        public string GetNumero()
+        {
+            return this.Numero;
+        }
+
+        public void CambiarEstado()
+        {
+            this.Estado = true;
+        }
     }
 }
 
