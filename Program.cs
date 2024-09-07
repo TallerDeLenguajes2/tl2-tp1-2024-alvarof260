@@ -9,7 +9,7 @@
 
             foreach (var item in lista)
             {
-                cadeteria.AddCadete(item);
+                cadeteria.AgregarCadete(item);
             }
 
             Console.WriteLine("Datos Cargados!");
@@ -36,13 +36,13 @@
                         pedido = Pedido.DarDeAlta();
                         break;
                     case 2:
-                        cadetes = cadeteria.GetCadetes();
+                        cadetes = cadeteria.ObtenerCadetes();
                         cadetes[random.Next(0, cadetes.Count)].AsignarPedido(pedido);
                         Console.WriteLine("asignado");
                         pedido = null;
                         break;
                     case 3:
-                        cadetes = cadeteria.GetCadetes();
+                        cadetes = cadeteria.ObtenerCadetes();
                         foreach (var item in cadetes)
                         {
                             Console.WriteLine(item.GetId());
@@ -65,7 +65,7 @@
                         }
                         break;
                     case 4:
-                        cadetes = cadeteria.GetCadetes();
+                        cadetes = cadeteria.ObtenerCadetes();
                         foreach (var item in cadetes)
                         {
                             Console.WriteLine(item.GetId());
