@@ -2,25 +2,17 @@ namespace tp1
 {
     public class Cliente
     {
-        private string Nombre { get; set; }
-        private string Direccion { get; set; }
-        private string Telefono { get; set; }
-        private string DatosReferenciaDireccion { get; set; }
+        public string Nombre { get; private set; }
+        public string Direccion { get; private set; }
+        public string Telefono { get; private set; }
+        public string DatosReferenciaDireccion { get; private set; }
 
-        public Cliente(string Nombre, string Direccion, string Telefono, string DatosReferenciaDireccion)
+        public Cliente(string nombre, string direccion, string telefono, string datosReferenciaDireccion = "")
         {
-            this.Nombre = Nombre;
-            this.Direccion = Direccion;
-            this.Telefono = Telefono;
-            this.DatosReferenciaDireccion = DatosReferenciaDireccion;
-        }
-
-        public Cliente(string Nombre, string Direccion, string Telefono)
-        {
-            this.Nombre = Nombre;
-            this.Direccion = Direccion;
-            this.Telefono = Telefono;
-            this.DatosReferenciaDireccion = "";
+            this.Nombre = nombre;
+            this.Direccion = direccion;
+            this.Telefono = telefono;
+            this.DatosReferenciaDireccion = datosReferenciaDireccion;
         }
     }
 }
