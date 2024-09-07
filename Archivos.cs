@@ -3,44 +3,70 @@ namespace tp1
 
     public class Archivos
     {
-        public static List<Cadeteria> LeerCadeterias(string ruta)
+
+        public static List<T> LeerArchivo<T>(string ruta, Func<string[], T> procesarLinea)
         {
-            List<Cadeteria> lista = new List<Cadeteria>();
+            List<T> lista = new List<T>();
+
+            if (!Existe(ruta))
+            {
+                Console.WriteLine($"El archivo en la ruta {ruta} no existe o está vacío.");
+                return lista;
+            }
+
             try
             {
                 string[] lineas = File.ReadAllLines(ruta);
                 foreach (var linea in lineas)
                 {
                     string[] datos = linea.Split(",");
-                    Cadeteria cadeteria = new Cadeteria(datos[0], datos[1]);
-                    lista.Add(cadeteria);
+                    T item = procesarLinea(datos);
+                    if (item != null)
+                    {
+                        lista.Add(item);
+                    }
                 }
-                return lista;
             }
             catch (System.Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                Console.WriteLine($"Error al leer el archivo en la ruta {ruta}: {e.Message}");
+                throw new IOException($"Error al procesar el archivo en {ruta}", e);
             }
 
+            return lista;
         }
 
-        public static Cadeteria ObtenerElPrimero(string ruta)
+        public static List<Cadeteria> ListaDeCadeterias(string ruta)
         {
-            return LeerCadeterias(ruta).ElementAt(0);
+            return LeerArchivo<Cadeteria>(ruta, datos =>
+            {
+                if (datos.Length < 2)
+                {
+                    Console.WriteLine($"Formato incorrecto en la línea: {string.Join(",", datos)}");
+                    return null;
+                }
+
+                return new Cadeteria(datos[0], datos[1]);
+            });
         }
 
         public static List<Cadete> ListaDeCadetes(string ruta)
         {
-            List<Cadete> lista = new List<Cadete>();
-            string[] lineas = File.ReadAllLines(ruta);
-            foreach (var linea in lineas)
+            return LeerArchivo<Cadete>(ruta, datos =>
             {
-                string[] datos = linea.Split(",");
-                Cadete cadete = new Cadete(datos[0], datos[1], datos[2], new List<Pedido>());
-                lista.Add(cadete);
-            }
-            return lista;
+                if (datos.Length < 3)
+                {
+                    Console.WriteLine($"Formato incorrecto en la línea: {string.Join(",", datos)}");
+                    return null;
+                }
+
+                return new Cadete(datos[0], datos[1], datos[2]);
+            });
+        }
+
+        public static Cadeteria ObtenerElPrimero(string ruta)
+        {
+            return ListaDeCadeterias(ruta).FirstOrDefault();
         }
 
         public static bool Existe(string ruta)
