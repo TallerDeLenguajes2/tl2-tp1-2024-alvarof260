@@ -6,11 +6,11 @@ namespace tp1
         public string Telefono { get; private set; }
         private List<Cadete> Cadetes { get; set; }
 
-        public Cadeteria(string Nombre, string Telefono, List<Cadete> Cadetes = null)
+        public Cadeteria(string nombre, string telefono, List<Cadete> cadetes = null)
         {
-            this.Nombre = Nombre;
-            this.Telefono = Telefono;
-            this.Cadetes = Cadetes ?? new List<Cadete>();
+            this.Nombre = nombre;
+            this.Telefono = telefono;
+            this.Cadetes = cadetes ?? new List<Cadete>();
         }
 
         public void AgregarCadete(Cadete cadete)

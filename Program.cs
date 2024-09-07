@@ -45,18 +45,18 @@
                         cadetes = cadeteria.ObtenerCadetes();
                         foreach (var item in cadetes)
                         {
-                            Console.WriteLine(item.GetId());
+                            Console.WriteLine(item.Id);
                         }
                         Console.WriteLine("Ingrese el numero de Cadete");
                         string numCadete = Console.ReadLine();
-                        cadete = cadetes.Find(x => x.GetId() == numCadete);
-                        foreach (var item in cadete.GetPedidos())
+                        cadete = cadetes.Find(x => x.Id == numCadete);
+                        foreach (var item in cadete.ObtenerPedidos())
                         {
                             Console.WriteLine(item.GetNumero());
                         }
                         Console.WriteLine("ingrese eL Numero de pedido");
                         string numPedido = Console.ReadLine();
-                        foreach (var item in cadete.GetPedidos())
+                        foreach (var item in cadete.ObtenerPedidos())
                         {
                             if (item.GetNumero() == numPedido)
                             {
@@ -68,18 +68,18 @@
                         cadetes = cadeteria.ObtenerCadetes();
                         foreach (var item in cadetes)
                         {
-                            Console.WriteLine(item.GetId());
+                            Console.WriteLine(item.Id);
                         }
                         Console.WriteLine("Ingrese el numero de Cadete");
                         numCadete = Console.ReadLine();
-                        cadete = cadetes.Find(x => x.GetId() == numCadete);
-                        foreach (var item in cadete.GetPedidos())
+                        cadete = cadetes.Find(x => x.Id == numCadete);
+                        foreach (var item in cadete.ObtenerPedidos())
                         {
                             Console.WriteLine(item.GetNumero());
                         }
                         Console.WriteLine("ingrese eL Numero de pedido");
                         numPedido = Console.ReadLine();
-                        foreach (var item in cadete.GetPedidos())
+                        foreach (var item in cadete.ObtenerPedidos())
                         {
                             if (item.GetNumero() == numPedido)
                             {

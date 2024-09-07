@@ -2,35 +2,24 @@ namespace tp1
 {
     public class Cadete
     {
-        private string Id { get; set; }
-        private string Nombre { get; set; }
-        private string Direccion { get; set; }
-        private string Telefono { get; set; }
+        public string Id { get; private set; }
+        public string Nombre { get; private set; }
+        public string Direccion { get; private set; }
+        public string Telefono { get; private set; }
         private List<Pedido> Pedidos { get; set; }
-        private Random random = new Random();
 
-        public Cadete(string Nombre, string Direccion, string Telefono, List<Pedido> Pedidos)
+        public Cadete(string nombre, string direccion, string telefono, List<Pedido> pedidos = null)
         {
             Id = GenerarId();
-            this.Nombre = Nombre;
-            this.Direccion = Direccion;
-            this.Telefono = Telefono;
-            this.Pedidos = Pedidos;
+            this.Nombre = nombre;
+            this.Direccion = direccion;
+            this.Telefono = telefono;
+            this.Pedidos = pedidos ?? new List<Pedido>();
         }
 
         public string GenerarId()
         {
-            return random.Next(0, 10000).ToString();
-        }
-
-        public string GetNombre()
-        {
-            return this.Nombre;
-        }
-
-        public string GetId()
-        {
-            return this.Id;
+            return Guid.NewGuid().ToString();
         }
 
         public void AsignarPedido(Pedido pedido)
@@ -38,7 +27,7 @@ namespace tp1
             this.Pedidos.Add(pedido);
         }
 
-        public List<Pedido> GetPedidos()
+        public List<Pedido> ObtenerPedidos()
         {
             return this.Pedidos;
         }
