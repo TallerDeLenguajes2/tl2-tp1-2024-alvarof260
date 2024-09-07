@@ -2,35 +2,38 @@ namespace tp1
 {
     public class Pedido
     {
-        private string Numero;
-        private string Observaciones;
-        private Cliente Cliente;
-        private bool Estado;
+        public string Numero { get; private set; }
+        public string Observaciones { get; private set; }
+        public Cliente Cliente { get; private set; }
+        private bool Estado { get; set; }
 
-        private Random random = new Random();
-
-        public Pedido(string Observaciones, string Nombre, string Direccion, string Telefono, string Referencia)
+        public Pedido(string nombre, string direccion, string telefono, string referencia, string observaciones = "")
         {
             this.Numero = GenerarNumero();
-            this.Observaciones = Observaciones;
-            this.Cliente = new Cliente(Nombre, Direccion, Telefono, Referencia);
+            this.Cliente = new Cliente(nombre, direccion, telefono, referencia);
             this.Estado = false;
-        }
-
-        public Pedido(string Nombre, string Direccion, string Telefono, string Referencia)
-        {
-            this.Numero = GenerarNumero();
-            this.Observaciones = "";
-            this.Cliente = new Cliente(Nombre, Direccion, Telefono, Referencia);
-            this.Estado = false;
+            this.Observaciones = observaciones;
         }
 
         private string GenerarNumero()
         {
-            return random.Next(0, 10000).ToString();
+            return Guid.NewGuid().ToString();
         }
 
-        public static Pedido DarDeAlta()
+        public void CambiarEstado(bool estado)
+        {
+            this.Estado = estado;
+        }
+
+        public bool ObtenerEstado()
+        {
+            return this.Estado;
+        }
+    }
+
+    class PedidoService
+    {
+        public static Pedido DarDeAltaPedido()
         {
             Console.WriteLine("Dar de alta un pedido");
             Console.WriteLine("Escriba las observaciones del pedido");
@@ -47,16 +50,5 @@ namespace tp1
 
             return pedido;
         }
-
-        public string GetNumero()
-        {
-            return this.Numero;
-        }
-
-        public void CambiarEstado()
-        {
-            this.Estado = true;
-        }
     }
 }
-

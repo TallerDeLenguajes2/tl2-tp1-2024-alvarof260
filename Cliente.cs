@@ -1,6 +1,6 @@
 namespace tp1
 {
-    class Cliente
+    public class Cliente
     {
         private string Nombre { get; set; }
         private string Direccion { get; set; }

@@ -33,7 +33,7 @@
                 switch (op)
                 {
                     case 1:
-                        pedido = Pedido.DarDeAlta();
+                        pedido = PedidoService.DarDeAltaPedido();
                         break;
                     case 2:
                         cadetes = cadeteria.ObtenerCadetes();
@@ -52,15 +52,15 @@
                         cadete = cadetes.Find(x => x.Id == numCadete);
                         foreach (var item in cadete.ObtenerPedidos())
                         {
-                            Console.WriteLine(item.GetNumero());
+                            Console.WriteLine(item.Numero);
                         }
                         Console.WriteLine("ingrese eL Numero de pedido");
                         string numPedido = Console.ReadLine();
                         foreach (var item in cadete.ObtenerPedidos())
                         {
-                            if (item.GetNumero() == numPedido)
+                            if (item.Numero == numPedido)
                             {
-                                item.CambiarEstado();
+                                item.CambiarEstado(true);
                             }
                         }
                         break;
@@ -75,13 +75,13 @@
                         cadete = cadetes.Find(x => x.Id == numCadete);
                         foreach (var item in cadete.ObtenerPedidos())
                         {
-                            Console.WriteLine(item.GetNumero());
+                            Console.WriteLine(item.Numero);
                         }
                         Console.WriteLine("ingrese eL Numero de pedido");
                         numPedido = Console.ReadLine();
                         foreach (var item in cadete.ObtenerPedidos())
                         {
-                            if (item.GetNumero() == numPedido)
+                            if (item.Numero == numPedido)
                             {
                                 pedido = item;
                             }
