@@ -22,18 +22,16 @@
 
             do
             {
-                Console.WriteLine("1. Dar de alta un pedido");
-                Console.WriteLine("2. Asignar un pedido a un cadete");
-                Console.WriteLine("3. Cambiar el estado de un pedido");
-                Console.WriteLine("4. Reasignar un pedido a otro cadete");
-                Console.WriteLine("5. Salir");
-
+                Menu(new string[] { "Dar de alta un pedido", "Asignar un pedido a un cadete",
+                    "Cambiar el estado de un pedido", "Reasignar un pedido a otro cadete", "Salir" });
                 int.TryParse(Console.ReadLine(), out op);
 
                 switch (op)
                 {
                     case 1:
                         pedido = PedidoService.DarDeAltaPedido();
+                        Console.Clear();
+                        PedidoService.MostrarPedido(pedido);
                         break;
                     case 2:
                         cadetes = cadeteria.ObtenerCadetes();
@@ -93,6 +91,14 @@
                         break;
                 }
             } while (op != 5);
+        }
+
+        public static void Menu(string[] opciones)
+        {
+            for (int i = 0; i < opciones.Count(); i++)
+            {
+                Console.WriteLine($"{i + 1} - {opciones[i]}");
+            }
         }
     }
 }

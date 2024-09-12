@@ -6,6 +6,8 @@ namespace tp1
         public string Observaciones { get; private set; }
         public Cliente Cliente { get; private set; }
         private bool Estado { get; set; }
+        private static Random random = new Random();
+        private static HashSet<string> idGenerados = new HashSet<string>();
 
         public Pedido(string nombre, string direccion, string telefono, string referencia, string observaciones = "")
         {
@@ -17,7 +19,13 @@ namespace tp1
 
         private string GenerarNumero()
         {
-            return Guid.NewGuid().ToString();
+            string numeroId;
+            do
+            {
+                numeroId = random.Next(1000, 10000).ToString();
+            } while (idGenerados.Contains(numeroId));
+            idGenerados.Add(numeroId);
+            return numeroId;
         }
 
         public void CambiarEstado(bool estado)
@@ -49,6 +57,15 @@ namespace tp1
             Pedido pedido = new Pedido(observaciones, nombre, direccion, telefono, referencia);
 
             return pedido;
+        }
+
+        public static void MostrarPedido(Pedido pedido)
+        {
+            Console.WriteLine("/-------------\\");
+            Console.WriteLine("Numero de pedido: " + pedido.Numero);
+            Console.WriteLine("Nombre de cliente del pedido: " + pedido.Cliente.Nombre);
+            Console.WriteLine("Observacion del pedido: " + (pedido.Observaciones == "" ? "no observacion" : pedido.Observaciones));
+            Console.WriteLine("\\-------------/");
         }
     }
 }

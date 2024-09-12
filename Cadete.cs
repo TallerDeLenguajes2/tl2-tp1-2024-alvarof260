@@ -7,6 +7,8 @@ namespace tp1
         public string Direccion { get; private set; }
         public string Telefono { get; private set; }
         private List<Pedido> Pedidos { get; set; }
+        private static Random random = new Random();
+        private static HashSet<string> idGenerados = new HashSet<string>();
 
         public Cadete(string nombre, string direccion, string telefono, List<Pedido> pedidos = null)
         {
@@ -19,7 +21,13 @@ namespace tp1
 
         public string GenerarId()
         {
-            return Guid.NewGuid().ToString();
+            string numeroId;
+            do
+            {
+                numeroId = random.Next(1000, 10000).ToString();
+            } while (idGenerados.Contains(numeroId));
+            idGenerados.Add(numeroId);
+            return numeroId;
         }
 
         public void AsignarPedido(Pedido pedido)
