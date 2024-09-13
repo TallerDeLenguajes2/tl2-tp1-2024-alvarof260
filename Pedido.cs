@@ -5,6 +5,7 @@ namespace tp1
         public string Numero { get; private set; }
         public string Observaciones { get; private set; }
         public Cliente Cliente { get; private set; }
+        public Cadete CadeteAsignado { get; private set; }
         private bool Estado { get; set; }
         private static Random random = new Random();
         private static HashSet<string> idGenerados = new HashSet<string>();
@@ -26,6 +27,11 @@ namespace tp1
             } while (idGenerados.Contains(numeroId));
             idGenerados.Add(numeroId);
             return numeroId;
+        }
+
+        public void AsignarCadete(Cadete cadete)
+        {
+            this.CadeteAsignado = cadete;
         }
 
         public void CambiarEstado(bool estado)
@@ -59,7 +65,7 @@ namespace tp1
             return pedido;
         }
 
-        public static void CambiarEstadoDePedido(Cadeteria cadeteria, string numPedido, string numCadete)
+        /* public static void CambiarEstadoDePedido(Cadeteria cadeteria, string numPedido, string numCadete)
         {
             Cadete cadete = cadeteria.ObtenerCadetes().Find(c => c.Id == numCadete);
             if (cadete == null)
@@ -79,7 +85,7 @@ namespace tp1
                 Console.WriteLine("Pedido no encontrado.");
             }
 
-        }
+        } */
 
         public static void MostrarPedido(Pedido pedido)
         {

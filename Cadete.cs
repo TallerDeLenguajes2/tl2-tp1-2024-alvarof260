@@ -6,7 +6,6 @@ namespace tp1
         public string Nombre { get; private set; }
         public string Direccion { get; private set; }
         public string Telefono { get; private set; }
-        private List<Pedido> Pedidos { get; set; }
         private static Random random = new Random();
         private static HashSet<string> idGenerados = new HashSet<string>();
 
@@ -16,7 +15,6 @@ namespace tp1
             this.Nombre = nombre;
             this.Direccion = direccion;
             this.Telefono = telefono;
-            this.Pedidos = pedidos ?? new List<Pedido>();
         }
 
         public string GenerarId()
@@ -30,18 +28,10 @@ namespace tp1
             return numeroId;
         }
 
-        public void AsignarPedido(Pedido pedido)
-        {
-            this.Pedidos.Add(pedido);
-        }
 
-        public List<Pedido> ObtenerPedidos()
-        {
-            return this.Pedidos;
-        }
     }
 
-    public class CadeteService
+    /* public class CadeteService
     {
         public static Cadete AsignarPedido(Cadeteria cadeteria, Pedido pedido, Random random)
         {
@@ -90,5 +80,5 @@ namespace tp1
             cadeteria.ObtenerCadetes().Find(c => c.Id == seleccionado.Id)?.AsignarPedido(pedido);
             return seleccionado;
         }
-    }
+    } */
 }
