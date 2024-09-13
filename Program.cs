@@ -4,15 +4,33 @@
     {
         static void Main(string[] args)
         {
-            Cadeteria cadeteria = Archivos.ObtenerElPrimero("cadeteria.csv");
-            List<Cadete> lista = Archivos.ListaDeCadetes("cadetes.csv");
+            AccesoADatos accesoDatos = null;
 
-            foreach (var item in lista)
+            Console.WriteLine("Seleccione el tipo de acceso a datos:");
+            Console.WriteLine("1. CSV");
+            Console.WriteLine("2. JSON");
+            int opcion = int.Parse(Console.ReadLine());
+
+            if (opcion == 1)
             {
-                cadeteria.AgregarCadete(item);
+                accesoDatos = new AccesoCSV();
+            }
+            else if (opcion == 2)
+            {
+                accesoDatos = new AccesoJSON();
+            }
+            else
+            {
+                Console.WriteLine("Opción inválida.");
+                return;
             }
 
-            Console.WriteLine("Datos Cargados!");
+            string rutaCadetes = opcion == 1 ? "cadetes.csv" : "cadetes.json";
+            string rutaPedidos = opcion == 1 ? "pedidos.csv" : "pedidos.json";
+
+            List<Cadete> cadetes = accesoDatos.CargarCadetes(rutaCadetes);
+            List<Pedido> pedidos = accesoDatos.CargarPedidos(rutaPedidos);
+
 
             int op = 0;
             Pedido pedido = null;

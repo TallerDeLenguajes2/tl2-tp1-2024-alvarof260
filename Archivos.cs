@@ -1,78 +1,59 @@
+using System.Text.Json;
+using System.IO;
+
 namespace tp1
 {
-
-    public class Archivos
+    public abstract class AccesoADatos
     {
+        public abstract List<Cadete> CargarCadetes(string ruta);
+        public abstract List<Pedido> CargarPedidos(string ruta);
+    }
 
-        public static List<T> LeerArchivo<T>(string ruta, Func<string[], T> procesarLinea)
+    public class AccesoCSV : AccesoADatos
+    {
+        public override List<Cadete> CargarCadetes(string ruta)
         {
-            List<T> lista = new List<T>();
+            List<Cadete> cadetes = new List<Cadete>();
+            string[] lineas = File.ReadAllLines(ruta);
 
-            if (!Existe(ruta))
+            foreach (var linea in lineas)
             {
-                Console.WriteLine($"El archivo en la ruta {ruta} no existe o está vacío.");
-                return lista;
+                string[] datos = linea.Split(",");
+                Cadete cadete = new Cadete(datos[0], datos[1], datos[2]);
+                cadetes.Add(cadete);
             }
+            return cadetes;
+        }
 
-            try
+        public override List<Pedido> CargarPedidos(string ruta)
+        {
+            List<Pedido> pedidos = new List<Pedido>();
+            string[] lineas = File.ReadAllLines(ruta);
+
+            foreach (var linea in lineas)
             {
-                string[] lineas = File.ReadAllLines(ruta);
-                foreach (var linea in lineas)
-                {
-                    string[] datos = linea.Split(",");
-                    T item = procesarLinea(datos);
-                    if (item != null)
-                    {
-                        lista.Add(item);
-                    }
-                }
+                string[] datos = linea.Split(",");
+                Pedido pedido = new Pedido(datos[0], datos[1], datos[2], datos[3], datos[4]);
+                pedidos.Add(pedido);
             }
-            catch (System.Exception e)
-            {
-                Console.WriteLine($"Error al leer el archivo en la ruta {ruta}: {e.Message}");
-                throw new IOException($"Error al procesar el archivo en {ruta}", e);
-            }
-
-            return lista;
-        }
-
-        public static List<Cadeteria> ListaDeCadeterias(string ruta)
-        {
-            return LeerArchivo<Cadeteria>(ruta, datos =>
-            {
-                if (datos.Length < 2)
-                {
-                    Console.WriteLine($"Formato incorrecto en la línea: {string.Join(",", datos)}");
-                    return null;
-                }
-
-                return new Cadeteria(datos[0], datos[1]);
-            });
-        }
-
-        public static List<Cadete> ListaDeCadetes(string ruta)
-        {
-            return LeerArchivo<Cadete>(ruta, datos =>
-            {
-                if (datos.Length < 3)
-                {
-                    Console.WriteLine($"Formato incorrecto en la línea: {string.Join(",", datos)}");
-                    return null;
-                }
-
-                return new Cadete(datos[0], datos[1], datos[2]);
-            });
-        }
-
-        public static Cadeteria ObtenerElPrimero(string ruta)
-        {
-            return ListaDeCadeterias(ruta).FirstOrDefault();
-        }
-
-        public static bool Existe(string ruta)
-        {
-            return File.Exists(ruta) && new FileInfo(ruta).Length > 0;
+            return pedidos;
         }
     }
+
+    public class AccesoJSON : AccesoADatos
+    {
+        public override List<Cadete> CargarCadetes(string ruta)
+        {
+            string json = File.ReadAllText(ruta);
+            return JsonSerializer.Deserialize<List<Cadete>>(json);
+        }
+
+        public override List<Pedido> CargarPedidos(string ruta)
+        {
+            string json = File.ReadAllText(ruta);
+            return JsonSerializer.Deserialize<List<Pedido>>(json);
+        }
+    }
+
 
 }
