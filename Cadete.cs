@@ -86,7 +86,7 @@ namespace tp1
             do
             {
                 seleccionado = cadetes[random.Next(0, cadetes.Count)];
-            } while (seleccionado != cadete);
+            } while (seleccionado == cadete);
             cadeteria.ObtenerCadetes().Find(c => c.Id == seleccionado.Id)?.AsignarPedido(pedido);
             return seleccionado;
         }

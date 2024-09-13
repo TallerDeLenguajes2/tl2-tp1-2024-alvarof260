@@ -54,7 +54,7 @@ namespace tp1
             string telefono = Console.ReadLine();
             Console.WriteLine("Escriba la referencia del cliente");
             string referencia = Console.ReadLine();
-            Pedido pedido = new Pedido(observaciones, nombre, direccion, telefono, referencia);
+            Pedido pedido = new Pedido(nombre, direccion, telefono, referencia, observaciones);
 
             return pedido;
         }

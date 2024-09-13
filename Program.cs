@@ -60,6 +60,18 @@
                         PedidoService.CambiarEstadoDePedido(cadeteria, numPedido, numCadete);
                         break;
                     case 4:
+                        cadetes = cadeteria.ObtenerCadetes();
+                        foreach (var cadeten in cadetes)
+                        {
+                            Console.WriteLine(cadeten.Id);
+                            Console.WriteLine("--------");
+                            pedidos = cadeten.ObtenerPedidos();
+                            foreach (var pedidon in pedidos)
+                            {
+                                Console.WriteLine(pedidon.Numero);
+                                Console.WriteLine("--------");
+                            }
+                        }
                         Console.WriteLine("Ingrese el numero de cadete: ");
                         numCadete = Console.ReadLine();
                         Console.WriteLine("Ingrese el numero de pedido:");
