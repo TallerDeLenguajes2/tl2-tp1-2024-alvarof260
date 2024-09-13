@@ -5,17 +5,33 @@ namespace tp1
 {
     public abstract class AccesoADatos
     {
-        public abstract List<Cadete> CargarCadetes(string ruta);
-        public abstract List<Pedido> CargarPedidos(string ruta);
+        public abstract Cadeteria CargarCadeteria();
+        public abstract List<Cadete> CargarCadetes();
     }
 
     public class AccesoCSV : AccesoADatos
     {
-        public override List<Cadete> CargarCadetes(string ruta)
+        private string rutaCadeteria;
+        private string rutaCadetes;
+
+
+        public AccesoCSV(string rutaCadeteria, string rutaCadetes)
+        {
+            this.rutaCadeteria = rutaCadeteria;
+            this.rutaCadetes = rutaCadetes;
+        }
+
+        public override Cadeteria CargarCadeteria()
+        {
+            string[] lineas = File.ReadAllLines(rutaCadeteria);
+            string[] datos = lineas[0].Split(",");
+            return new Cadeteria(datos[0], datos[1]);
+        }
+
+        public override List<Cadete> CargarCadetes()
         {
             List<Cadete> cadetes = new List<Cadete>();
-            string[] lineas = File.ReadAllLines(ruta);
-
+            string[] lineas = File.ReadAllLines(rutaCadetes);
             foreach (var linea in lineas)
             {
                 string[] datos = linea.Split(",");
@@ -25,35 +41,30 @@ namespace tp1
             return cadetes;
         }
 
-        public override List<Pedido> CargarPedidos(string ruta)
-        {
-            List<Pedido> pedidos = new List<Pedido>();
-            string[] lineas = File.ReadAllLines(ruta);
 
-            foreach (var linea in lineas)
-            {
-                string[] datos = linea.Split(",");
-                Pedido pedido = new Pedido(datos[0], datos[1], datos[2], datos[3], datos[4]);
-                pedidos.Add(pedido);
-            }
-            return pedidos;
-        }
     }
 
     public class AccesoJSON : AccesoADatos
     {
-        public override List<Cadete> CargarCadetes(string ruta)
+        private string rutaCadeteria;
+        private string rutaCadetes;
+
+        public AccesoJSON(string rutaCadeteria, string rutaCadetes)
         {
-            string json = File.ReadAllText(ruta);
+            this.rutaCadeteria = rutaCadeteria;
+            this.rutaCadetes = rutaCadetes;
+        }
+
+        public override Cadeteria CargarCadeteria()
+        {
+            string json = File.ReadAllText(rutaCadeteria);
+            return JsonSerializer.Deserialize<Cadeteria>(json);
+        }
+
+        public override List<Cadete> CargarCadetes()
+        {
+            string json = File.ReadAllText(rutaCadetes);
             return JsonSerializer.Deserialize<List<Cadete>>(json);
         }
-
-        public override List<Pedido> CargarPedidos(string ruta)
-        {
-            string json = File.ReadAllText(ruta);
-            return JsonSerializer.Deserialize<List<Pedido>>(json);
-        }
     }
-
-
 }

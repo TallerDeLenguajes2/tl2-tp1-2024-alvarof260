@@ -4,38 +4,39 @@
     {
         static void Main(string[] args)
         {
-            AccesoADatos accesoDatos = null;
+            AccesoADatos accesoDatos;
+            Console.WriteLine("Seleccione el tipo de acceso (1: CSV, 2: JSON): ");
+            string opcion = Console.ReadLine();
 
-            Console.WriteLine("Seleccione el tipo de acceso a datos:");
-            Console.WriteLine("1. CSV");
-            Console.WriteLine("2. JSON");
-            int opcion = int.Parse(Console.ReadLine());
-
-            if (opcion == 1)
+            if (opcion == "1")
             {
-                accesoDatos = new AccesoCSV();
+                accesoDatos = new AccesoCSV("cadeteria.csv", "cadetes.csv");
             }
-            else if (opcion == 2)
+            else if (opcion == "2")
             {
-                accesoDatos = new AccesoJSON();
+                accesoDatos = new AccesoJSON("cadeteria.json", "cadetes.json");
             }
             else
             {
-                Console.WriteLine("Opción inválida.");
+                Console.WriteLine("Opción inválida");
                 return;
             }
 
-            string rutaCadetes = opcion == 1 ? "cadetes.csv" : "cadetes.json";
-            string rutaPedidos = opcion == 1 ? "pedidos.csv" : "pedidos.json";
+            // Cargar los datos
+            Cadeteria cadeteria = accesoDatos.CargarCadeteria();
+            List<Cadete> cadetes = accesoDatos.CargarCadetes();
 
-            List<Cadete> cadetes = accesoDatos.CargarCadetes(rutaCadetes);
-            List<Pedido> pedidos = accesoDatos.CargarPedidos(rutaPedidos);
+            foreach (var cadete in cadetes)
+            {
+                cadeteria.AgregarCadete(cadete);
+            }
+            // Operar con los datos cargados
+            Console.WriteLine("Datos cargados correctamente.");
 
 
             int op = 0;
             Pedido pedido = null;
             Random random = new Random();
-            List<Cadete> cadetes = null;
 
             do
             {
