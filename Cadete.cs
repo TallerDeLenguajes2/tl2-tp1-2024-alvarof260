@@ -40,4 +40,30 @@ namespace tp1
             return this.Pedidos;
         }
     }
+
+    public class CadeteService
+    {
+        public static Cadete AsignarPedido(Cadeteria cadeteria, Pedido pedido, Random random)
+        {
+            if (pedido == null)
+            {
+                Console.WriteLine("No hay pedido para asignar.");
+                return null;
+            }
+
+            List<Cadete> cadetes = cadeteria.ObtenerCadetes();
+
+            if (cadetes.Count == 0)
+            {
+                Console.WriteLine("No hay cadetes para asignar el pedido.");
+                return null;
+            }
+
+            Cadete seleccionado = cadetes[random.Next(0, cadetes.Count)];
+
+            cadeteria.ObtenerCadetes().Find(c => c.Id == seleccionado.Id)?.AsignarPedido(pedido);
+
+            return seleccionado;
+        }
+    }
 }

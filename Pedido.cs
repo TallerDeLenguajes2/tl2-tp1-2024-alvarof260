@@ -59,6 +59,28 @@ namespace tp1
             return pedido;
         }
 
+        public static void CambiarEstadoDePedido(Cadeteria cadeteria, string numPedido, string numCadete)
+        {
+            Cadete cadete = cadeteria.ObtenerCadetes().Find(c => c.Id == numCadete);
+            if (cadete == null)
+            {
+                Console.WriteLine("Cadete no encontrado.");
+                return;
+            }
+
+            Pedido pedido = cadete.ObtenerPedidos().Find(p => p.Numero == numPedido);
+            if (pedido != null)
+            {
+                pedido.CambiarEstado(true);
+                Console.WriteLine("Estado del pedido actualizado.");
+            }
+            else
+            {
+                Console.WriteLine("Pedido no encontrado.");
+            }
+
+        }
+
         public static void MostrarPedido(Pedido pedido)
         {
             Console.WriteLine("/-------------\\");
