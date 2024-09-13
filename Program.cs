@@ -16,19 +16,53 @@
 
             int op = 0;
             Pedido pedido = null;
-            List<Cadete> cadetes = null;
-            Cadete cadete = null;
             Random random = new Random();
-            List<Pedido> pedidos = null;
+            List<Cadete> cadetes = null;
 
             do
             {
                 Menu(new string[] { "Dar de alta un pedido", "Asignar un pedido a un cadete",
-                    "Cambiar el estado de un pedido", "Reasignar un pedido a otro cadete", "Salir" });
+                "Jornal a cobrar por cadete", "Salir" });
                 int.TryParse(Console.ReadLine(), out op);
 
+                switch (op)
+                {
+                    case 1:
+                        pedido = PedidoService.DarDeAltaPedido();
+                        cadeteria.AgregarPedido(pedido);
+                        Console.WriteLine(pedido.Numero);
+                        break;
 
-            } while (op != 5);
+                    case 2:
+                        cadetes = cadeteria.ObtenerCadetes();
+                        Console.WriteLine("Cadetes");
+                        foreach (var cadete in cadetes)
+                        {
+                            Console.WriteLine(cadete.Id);
+                            Console.WriteLine("----------");
+                        }
+                        Console.WriteLine("Ingrese el ID del cadete:");
+                        string idCadete = Console.ReadLine();
+                        Console.WriteLine("Ingrese el número de pedido:");
+                        string numPedido = Console.ReadLine();
+                        cadeteria.AsignarCadeteAPedido(idCadete, numPedido);
+                        break;
+
+                    case 3:
+                        cadetes = cadeteria.ObtenerCadetes();
+                        Console.WriteLine("Cadetes");
+                        foreach (var cadete in cadetes)
+                        {
+                            Console.WriteLine(cadete.Id);
+                            Console.WriteLine("----------");
+                        }
+                        Console.WriteLine("Ingrese el ID del cadete:");
+                        idCadete = Console.ReadLine();
+                        double jornal = cadeteria.JornalACobrar(idCadete);
+                        Console.WriteLine($"El jornal a cobrar es: {jornal}");
+                        break;
+                }
+            } while (op != 4);
         }
 
         public static void Menu(string[] opciones)

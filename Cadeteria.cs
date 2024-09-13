@@ -25,7 +25,7 @@ namespace tp1
             return this.Cadetes;
         }
 
-        public void AsignarPedido(Pedido pedido)
+        public void AgregarPedido(Pedido pedido)
         {
             this.Pedidos.Add(pedido);
         }
