@@ -65,5 +65,30 @@ namespace tp1
 
             return seleccionado;
         }
+        public static Cadete ReasignarPedido(Cadeteria cadeteria, string numCadete, string numPedido, Random random)
+        {
+            Cadete cadete = cadeteria.ObtenerCadetes().Find(c => c.Id == numCadete);
+            if (cadete == null)
+            {
+                Console.WriteLine("Cadete no encontrado.");
+                return null;
+            }
+
+            Pedido pedido = cadete.ObtenerPedidos().Find(p => p.Numero == numPedido);
+            if (pedido == null)
+            {
+                Console.WriteLine("Pedido no encontrado.");
+                return null;
+            }
+
+            List<Cadete> cadetes = cadeteria.ObtenerCadetes();
+            Cadete seleccionado;
+            do
+            {
+                seleccionado = cadetes[random.Next(0, cadetes.Count)];
+            } while (seleccionado != cadete);
+            cadeteria.ObtenerCadetes().Find(c => c.Id == seleccionado.Id)?.AsignarPedido(pedido);
+            return seleccionado;
+        }
     }
 }
