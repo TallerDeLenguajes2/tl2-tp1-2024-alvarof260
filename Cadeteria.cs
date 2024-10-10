@@ -56,17 +56,18 @@ public class Cadeteria
         return 0;
     }
 
-    public void AsignarCadeteAPedido(string idCadete, Pedido pedido)
+    public bool AsignarCadeteAPedido(string idCadete, Pedido pedido)
     {
         Cadete cadete = BuscarCadete(idCadete);
         if (cadete != null)
         {
             pedido.AsignarCadete(cadete);
             AgregarPedido(pedido);
+            return true;
         }
         else
         {
-            Console.WriteLine("No se encontro el cadete");
+            return false;
         }
     }
 
@@ -128,6 +129,7 @@ public class Cadeteria
         Console.WriteLine($"Promedio de envíos por cadete: {promedioEnviosPorCadete:F2}");
         Console.WriteLine("------------------------");
     }
+
     public Pedido DarAltaPedido()
     {
         Console.WriteLine("Datos de cliente\nEscriba una observacion:");
@@ -143,21 +145,22 @@ public class Cadeteria
         return new Pedido(nombre, direccion, telefono, Estado.Pendiente, dato, obs);
     }
 
-    public void CambiarEstado(string id)
+    public bool CambiarEstado(string id)
     {
         Pedido pedido = BuscarPedido(id);
         if (pedido != null)
         {
             pedido.CambiarEstado(Estado.Entregado);
             Visual.VerPedidos(new List<Pedido>() { pedido });
+            return true;
         }
         else
         {
-            Console.WriteLine("No se encontro el pedido");
+            return false;
         }
     }
 
-    public void ReasignarPedido(string idCadete, string idPedido)
+    public bool ReasignarPedido(string idCadete, string idPedido)
     {
         Pedido pedido = BuscarPedido(idPedido);
         Cadete cadete = BuscarCadete(idCadete);
@@ -167,15 +170,16 @@ public class Cadeteria
             {
                 pedido.AsignarCadete(cadete);
                 Visual.VerCadetes(new List<Cadete>() { cadete });
+                return true;
             }
             else
             {
-                Console.WriteLine("No se encontro el cadete");
+                return false;
             }
         }
         else
         {
-            Console.WriteLine("No se encontro el pedido");
+            return false;
         }
     }
 }
