@@ -1,95 +1,100 @@
-﻿namespace tp1
+﻿class Program
 {
-    class Program
+    public static void Main()
     {
-        static void Main(string[] args)
+        Cadeteria cadeteria = null;
+        List<Cadete> cadetes = null;
+        int op = 0;
+        Pedido pedido = null;
+        string idCadete, idPedido;
+
+        Visual.MenuAcceso();
+
+        while (!int.TryParse(Console.ReadLine(), out op) || op < 1 || op > 2)
         {
-            AccesoADatos accesoDatos;
-            Console.WriteLine("Seleccione el tipo de acceso (1: CSV, 2: JSON): ");
-            string opcion = Console.ReadLine();
-
-            if (opcion == "1")
-            {
-                accesoDatos = new AccesoCSV("cadeteria.csv", "cadetes.csv");
-            }
-            else if (opcion == "2")
-            {
-                accesoDatos = new AccesoJSON("cadeteria.json", "cadetes.json");
-            }
-            else
-            {
-                Console.WriteLine("Opción inválida");
-                return;
-            }
-
-            // Cargar los datos
-            Cadeteria cadeteria = accesoDatos.CargarCadeteria();
-            List<Cadete> cadetes = accesoDatos.CargarCadetes();
-
-            foreach (var cadete in cadetes)
-            {
-                cadeteria.AgregarCadete(cadete);
-            }
-            // Operar con los datos cargados
-            Console.WriteLine("Datos cargados correctamente.");
-
-
-            int op = 0;
-            Pedido pedido = null;
-            Random random = new Random();
-
-            do
-            {
-                Menu(new string[] { "Dar de alta un pedido", "Asignar un pedido a un cadete",
-                "Jornal a cobrar por cadete", "Salir" });
-                int.TryParse(Console.ReadLine(), out op);
-
-                switch (op)
-                {
-                    case 1:
-                        pedido = PedidoService.DarDeAltaPedido();
-                        cadeteria.AgregarPedido(pedido);
-                        Console.WriteLine(pedido.Numero);
-                        break;
-
-                    case 2:
-                        cadetes = cadeteria.ObtenerCadetes();
-                        Console.WriteLine("Cadetes");
-                        foreach (var cadete in cadetes)
-                        {
-                            Console.WriteLine(cadete.Id);
-                            Console.WriteLine("----------");
-                        }
-                        Console.WriteLine("Ingrese el ID del cadete:");
-                        string idCadete = Console.ReadLine();
-                        Console.WriteLine("Ingrese el número de pedido:");
-                        string numPedido = Console.ReadLine();
-                        cadeteria.AsignarCadeteAPedido(idCadete, numPedido);
-                        break;
-
-                    case 3:
-                        cadetes = cadeteria.ObtenerCadetes();
-                        Console.WriteLine("Cadetes");
-                        foreach (var cadete in cadetes)
-                        {
-                            Console.WriteLine(cadete.Id);
-                            Console.WriteLine("----------");
-                        }
-                        Console.WriteLine("Ingrese el ID del cadete:");
-                        idCadete = Console.ReadLine();
-                        double jornal = cadeteria.JornalACobrar(idCadete);
-                        Console.WriteLine($"El jornal a cobrar es: {jornal}");
-                        break;
-                }
-            } while (op != 4);
+            Console.WriteLine("Intente de nuevo, opcion incorrecta.");
+        }
+        switch (op)
+        {
+            case 1:
+                AccesoJSON accesoJSON = new AccesoJSON();
+                cadeteria = accesoJSON.CargarCadeteria("cadeteria.json");
+                cadetes = accesoJSON.CargarCadetes("cadetes.json");
+                break;
+            case 2:
+                AccesoCSV accesoCSV = new AccesoCSV();
+                cadeteria = accesoCSV.CargarCadeteria("cadeteria.csv");
+                cadetes = accesoCSV.CargarCadetes("cadetes.csv");
+                break;
         }
 
-        public static void Menu(string[] opciones)
+        foreach (var cadete in cadetes)
         {
-            for (int i = 0; i < opciones.Count(); i++)
-            {
-                Console.WriteLine($"{i + 1} - {opciones[i]}");
-            }
+            cadeteria.AgregarCadetes(cadete);
         }
+
+        do
+        {
+            Visual.MenuPrincipal();
+            if (int.TryParse(Console.ReadLine(), out op) == false)
+            {
+                Console.WriteLine("caracter incorrecto");
+                Console.ReadKey();
+            }
+            else if (op < 0 || op > 5)
+            {
+                Console.WriteLine("eligio una opcion inexistente, vuelva a intentar");
+                Console.ReadKey();
+            }
+
+            switch (op)
+            {
+                case 1:
+                    Console.WriteLine("Dar de alta pedido");
+                    pedido = cadeteria.DarAltaPedido();
+                    Console.ReadKey();
+                    break;
+                case 2:
+                    Console.WriteLine("Asignar pedido a cadete");
+                    Visual.VerCadetes(cadeteria.ObtenerCadetes());
+                    Console.WriteLine("Ingrese ID de cadete:");
+                    idCadete = Console.ReadLine();
+                    cadeteria.AsignarCadeteAPedido(idCadete, pedido);
+                    pedido = null;
+                    Console.ReadKey();
+                    break;
+                case 3:
+                    Console.WriteLine("Cambiar de estado a pedido");
+                    Visual.VerPedidos(cadeteria.ObtenerPedidos().Where(p => p.ObtenerEstado() == Estado.Asignado).ToList());
+                    Console.WriteLine("Ingrese ID de pedido:");
+                    idPedido = Console.ReadLine();
+                    cadeteria.CambiarEstado(idPedido);
+                    Console.ReadKey();
+                    break;
+                case 4:
+                    Console.WriteLine("Cambiar el cadete a pedido");
+                    Visual.VerPedidos(cadeteria.ObtenerPedidos().Where(p => p.ObtenerEstado() == Estado.Asignado).ToList());
+                    Console.WriteLine("Ingrese ID de pedido:");
+                    idPedido = Console.ReadLine();
+                    Visual.VerCadetes(cadeteria.ObtenerCadetes());
+                    Console.WriteLine("Ingrese ID de cadete:");
+                    idCadete = Console.ReadLine();
+                    cadeteria.ReasignarPedido(idCadete, idPedido);
+                    Console.ReadKey();
+                    break;
+                case 5:
+                    Console.WriteLine("Jornal de cadete");
+                    Visual.VerCadetes(cadeteria.ObtenerCadetes());
+                    Console.WriteLine("Ingrese ID de cadete:");
+                    idCadete = Console.ReadLine();
+                    int jornal = cadeteria.JornalAcobrar(idCadete);
+                    Console.WriteLine($"Jornal a cobrar: {jornal}");
+                    Console.ReadKey();
+                    break;
+            }
+            Console.Clear();
+        } while (op != 0);
+        cadeteria.GenerarInformeDiario();
+        Console.ReadKey();
     }
 }

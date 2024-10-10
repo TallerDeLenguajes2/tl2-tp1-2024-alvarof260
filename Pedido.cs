@@ -1,99 +1,61 @@
-namespace tp1
+
+public enum Estado
 {
-    public class Pedido
+    Pendiente,
+    Asignado,
+    Entregado,
+}
+public class Pedido
+{
+    private static int contador = 0;
+    private string numero;
+    private string observacion;
+    private Cliente cliente;
+    private Estado estado;
+    private Cadete cadeteAsignado;
+
+    public Pedido(string nombre, string direccion, string telefono, Estado estado, string datosReferenciaDireccion = "", string observacion = "")
     {
-        public string Numero { get; private set; }
-        public string Observaciones { get; private set; }
-        public Cliente Cliente { get; private set; }
-        public Cadete CadeteAsignado { get; private set; }
-        private bool Estado { get; set; }
-        private static Random random = new Random();
-        private static HashSet<string> idGenerados = new HashSet<string>();
-
-        public Pedido(string nombre, string direccion, string telefono, string referencia, string observaciones = "")
-        {
-            this.Numero = GenerarNumero();
-            this.Cliente = new Cliente(nombre, direccion, telefono, referencia);
-            this.Estado = false;
-            this.Observaciones = observaciones;
-        }
-
-        private string GenerarNumero()
-        {
-            string numeroId;
-            do
-            {
-                numeroId = random.Next(1000, 10000).ToString();
-            } while (idGenerados.Contains(numeroId));
-            idGenerados.Add(numeroId);
-            return numeroId;
-        }
-
-        public void AsignarCadete(Cadete cadete)
-        {
-            this.CadeteAsignado = cadete;
-        }
-
-        public void CambiarEstado(bool estado)
-        {
-            this.Estado = estado;
-        }
-
-        public bool ObtenerEstado()
-        {
-            return this.Estado;
-        }
+        this.numero = GenerarNumero();
+        this.observacion = observacion;
+        this.cliente = new Cliente(nombre, direccion, telefono, datosReferenciaDireccion);
+        this.estado = estado;
+        this.cadeteAsignado = null;
     }
 
-    class PedidoService
+    private string GenerarNumero()
     {
-        public static Pedido DarDeAltaPedido()
-        {
-            Console.WriteLine("Dar de alta un pedido");
-            Console.WriteLine("Escriba las observaciones del pedido");
-            string observaciones = Console.ReadLine();
-            Console.WriteLine("Escriba el nombre del cliente");
-            string nombre = Console.ReadLine();
-            Console.WriteLine("Escriba la direccion del cliente");
-            string direccion = Console.ReadLine();
-            Console.WriteLine("Escriba el telefono del cliente");
-            string telefono = Console.ReadLine();
-            Console.WriteLine("Escriba la referencia del cliente");
-            string referencia = Console.ReadLine();
-            Pedido pedido = new Pedido(nombre, direccion, telefono, referencia, observaciones);
+        contador++;
+        return contador.ToString("D4");
+    }
 
-            return pedido;
-        }
+    public Estado ObtenerEstado() { return this.estado; }
+    public string ObtenerNumero() { return this.numero; }
+    public string ObtenerNombre() { return this.cliente.ObtenerNombre(); }
+    public string ObtenerCadeteAsignado() { return this.cadeteAsignado.ObtenerId(); }
 
-        /* public static void CambiarEstadoDePedido(Cadeteria cadeteria, string numPedido, string numCadete)
-        {
-            Cadete cadete = cadeteria.ObtenerCadetes().Find(c => c.Id == numCadete);
-            if (cadete == null)
-            {
-                Console.WriteLine("Cadete no encontrado.");
-                return;
-            }
+    public void VerDireccionCliente()
+    {
+        Console.WriteLine($"Direccion de cliente: {this.cliente.ObtenerDireccion()}");
+    }
+    public void VerDatosCliente()
+    {
+        Console.WriteLine("-*-*-* Informacion *-*-*-");
+        Console.WriteLine($"nombre: {this.cliente.ObtenerNombre()}");
+        Console.WriteLine($"direccion: {this.cliente.ObtenerDireccion()}");
+        Console.WriteLine($"telefono: {this.cliente.ObtenerTelefono()}");
+        Console.WriteLine($"datos referencia de direccion: {this.cliente.ObtenerDatosReferenciaDireccion()}");
+    }
 
-            Pedido pedido = cadete.ObtenerPedidos().Find(p => p.Numero == numPedido);
-            if (pedido != null)
-            {
-                pedido.CambiarEstado(true);
-                Console.WriteLine("Estado del pedido actualizado.");
-            }
-            else
-            {
-                Console.WriteLine("Pedido no encontrado.");
-            }
+    public void CambiarEstado(Estado estado)
+    {
+        this.estado = estado;
+    }
 
-        } */
+    public void AsignarCadete(Cadete cadete)
+    {
+        this.cadeteAsignado = cadete;
+        this.CambiarEstado(Estado.Asignado);
 
-        public static void MostrarPedido(Pedido pedido)
-        {
-            Console.WriteLine("/-------------\\");
-            Console.WriteLine("Numero de pedido: " + pedido.Numero);
-            Console.WriteLine("Nombre de cliente del pedido: " + pedido.Cliente.Nombre);
-            Console.WriteLine("Observacion del pedido: " + (pedido.Observaciones == "" ? "no observacion" : pedido.Observaciones));
-            Console.WriteLine("\\-------------/");
-        }
     }
 }

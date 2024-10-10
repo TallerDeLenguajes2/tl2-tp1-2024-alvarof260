@@ -1,65 +1,181 @@
-namespace tp1
+using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+public class Cadeteria
 {
-    public class Cadeteria
+    [JsonPropertyName("nombre")]
+    private string nombre;
+    [JsonPropertyName("telefono")]
+    private string telefono;
+    private List<Cadete> listadoCadetes;
+    private List<Pedido> listadoPedidos;
+    private static int gananciaXPedido = 500;
+
+    // relacion por agregracion, ya que los cadetes tiene independencia de la cadeteria
+    public Cadeteria(string nombre, string telefono, List<Cadete> listadoCadetes)
     {
-        public string Nombre { get; private set; }
-        public string Telefono { get; private set; }
-        private List<Cadete> Cadetes { get; set; }
-        private List<Pedido> Pedidos { get; set; }
+        this.nombre = nombre;
+        this.telefono = telefono;
+        this.listadoCadetes = listadoCadetes ?? new List<Cadete>();
+        this.listadoPedidos = new List<Pedido>();
+    }
 
-        public Cadeteria(string nombre, string telefono, List<Cadete> cadetes = null, List<Pedido> pedidos = null)
+    public string ObtenerNombre() { return this.nombre; }
+    public string ObtenerTelefono() { return this.telefono; }
+    public List<Cadete> ObtenerCadetes() { return this.listadoCadetes; }
+    public List<Pedido> ObtenerPedidos() { return this.listadoPedidos; }
+
+    public void AgregarCadetes(Cadete cadete)
+    {
+        listadoCadetes.Add(cadete);
+    }
+
+    public void BorrarCadete(Cadete cadete)
+    {
+        listadoCadetes.Remove(cadete);
+    }
+
+    public void AgregarPedido(Pedido pedido)
+    {
+        listadoPedidos.Add(pedido);
+    }
+
+    public void BorrarPedidos(Pedido pedido)
+    {
+        this.listadoPedidos.Remove(pedido);
+    }
+
+    public int JornalAcobrar(string idCadete)
+    {
+        Cadete cadete = this.listadoCadetes.Find(c => c.ObtenerId() == idCadete);
+        if (cadete != null)
         {
-            this.Nombre = nombre;
-            this.Telefono = telefono;
-            this.Cadetes = cadetes ?? new List<Cadete>();
-            this.Pedidos = pedidos ?? new List<Pedido>();
+            return this.listadoPedidos.Where(p => p.ObtenerCadeteAsignado() == idCadete).Count() * gananciaXPedido;
+        }
+        return 0;
+    }
+
+    public void AsignarCadeteAPedido(string idCadete, Pedido pedido)
+    {
+        Cadete cadete = BuscarCadete(idCadete);
+        if (cadete != null)
+        {
+            pedido.AsignarCadete(cadete);
+            AgregarPedido(pedido);
+        }
+        else
+        {
+            Console.WriteLine("No se encontro el cadete");
+        }
+    }
+
+    private Cadete BuscarCadete(string id)
+    {
+        Cadete encontrado = this.listadoCadetes.Find(c => c.ObtenerId() == id);
+        if (encontrado != null)
+        {
+            return encontrado;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private Pedido BuscarPedido(string id)
+    {
+        Pedido encontrado = this.listadoPedidos.Find(p => p.ObtenerNumero() == id);
+        if (encontrado != null)
+        {
+            return encontrado;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public void GenerarInformeDiario()
+    {
+        var cadetes = this.listadoCadetes;
+        int totalPedidos = 0;
+        decimal totalGanado = 0;
+
+        Console.WriteLine("---- Informe Diario ----");
+        Console.WriteLine("------------------------");
+
+        foreach (var cadete in cadetes)
+        {
+            var pedidos = this.listadoPedidos;
+            int cantidadPedidos = pedidos.Count(p => p.ObtenerCadeteAsignado() == cadete.ObtenerId());
+            int montoGanado = JornalAcobrar(cadete.ObtenerId());
+
+            totalPedidos += cantidadPedidos;
+            totalGanado += montoGanado;
+
+            Console.WriteLine($"Cadete: {cadete.ObtenerNombre()}");
+            Console.WriteLine($"Cantidad de pedidos: {cantidadPedidos}");
+            Console.WriteLine($"Monto ganado: {montoGanado:C}");
+            Console.WriteLine("------------------------");
         }
 
-        public void AgregarCadete(Cadete cadete)
-        {
-            this.Cadetes.Add(cadete);
-        }
+        // Calcular el promedio de pedidos por cadete
+        decimal promedioEnviosPorCadete = (cadetes.Count() > 0) ? (decimal)totalPedidos / cadetes.Count() : 0;
 
-        public List<Cadete> ObtenerCadetes()
-        {
-            return this.Cadetes;
-        }
+        Console.WriteLine($"Total de pedidos: {totalPedidos}");
+        Console.WriteLine($"Total ganado por todos los cadetes: {totalGanado:C}");
+        Console.WriteLine($"Promedio de envíos por cadete: {promedioEnviosPorCadete:F2}");
+        Console.WriteLine("------------------------");
+    }
+    public Pedido DarAltaPedido()
+    {
+        Console.WriteLine("Datos de cliente\nEscriba una observacion:");
+        string obs = Console.ReadLine();
+        Console.WriteLine("Escriba un nombre:");
+        string nombre = Console.ReadLine();
+        Console.WriteLine("Escriba la direccion:");
+        string direccion = Console.ReadLine();
+        Console.WriteLine("Escriba el telefono:");
+        string telefono = Console.ReadLine();
+        Console.WriteLine("Escriba un dato de referencia de direccion:");
+        string dato = Console.ReadLine();
+        return new Pedido(nombre, direccion, telefono, Estado.Pendiente, dato, obs);
+    }
 
-        public void AgregarPedido(Pedido pedido)
+    public void CambiarEstado(string id)
+    {
+        Pedido pedido = BuscarPedido(id);
+        if (pedido != null)
         {
-            this.Pedidos.Add(pedido);
+            pedido.CambiarEstado(Estado.Entregado);
+            Visual.VerPedidos(new List<Pedido>() { pedido });
         }
-
-        public List<Pedido> ObtenerPedidos()
+        else
         {
-            return this.Pedidos;
+            Console.WriteLine("No se encontro el pedido");
         }
+    }
 
-        public double JornalACobrar(string idCadete)
+    public void ReasignarPedido(string idCadete, string idPedido)
+    {
+        Pedido pedido = BuscarPedido(idPedido);
+        Cadete cadete = BuscarCadete(idCadete);
+        if (pedido != null)
         {
-            Cadete cadete = Cadetes.Find(c => c.Id == idCadete);
             if (cadete != null)
             {
-                return Pedidos.Where(p => p.CadeteAsignado?.Id == idCadete).Count() * 500;
-            }
-            return 0;
-        }
-
-        public void AsignarCadeteAPedido(string idCadete, string idPedido)
-        {
-            Cadete cadete = Cadetes.Find(c => c.Id == idCadete);
-            Pedido pedido = Pedidos.Find(p => p.Numero == idPedido);
-
-            if (cadete != null && pedido != null)
-            {
                 pedido.AsignarCadete(cadete);
-                Console.WriteLine($"Pedido {idPedido} asignado al cadete {cadete.Nombre}.");
+                Visual.VerCadetes(new List<Cadete>() { cadete });
             }
             else
             {
-                Console.WriteLine("Error al asignar el pedido.");
+                Console.WriteLine("No se encontro el cadete");
             }
         }
-
+        else
+        {
+            Console.WriteLine("No se encontro el pedido");
+        }
     }
 }

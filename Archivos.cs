@@ -1,70 +1,99 @@
 using System.Text.Json;
-using System.IO;
 
-namespace tp1
+public abstract class AccesoADatos
 {
-    public abstract class AccesoADatos
+    public abstract Cadeteria CargarCadeteria(string nombreArchivo);
+    public abstract List<Cadete> CargarCadetes(string nombreArchivo);
+}
+
+public class AccesoCSV : AccesoADatos
+{
+    public override Cadeteria CargarCadeteria(string nombreArchivo)
     {
-        public abstract Cadeteria CargarCadeteria();
-        public abstract List<Cadete> CargarCadetes();
-    }
-
-    public class AccesoCSV : AccesoADatos
-    {
-        private string rutaCadeteria;
-        private string rutaCadetes;
-
-
-        public AccesoCSV(string rutaCadeteria, string rutaCadetes)
+        Cadeteria cadeteria = null;
+        string ruta = Path.Combine("archivos", nombreArchivo);
+        try
         {
-            this.rutaCadeteria = rutaCadeteria;
-            this.rutaCadetes = rutaCadetes;
-        }
-
-        public override Cadeteria CargarCadeteria()
-        {
-            string[] lineas = File.ReadAllLines(rutaCadeteria);
-            string[] datos = lineas[0].Split(",");
-            return new Cadeteria(datos[0], datos[1]);
-        }
-
-        public override List<Cadete> CargarCadetes()
-        {
-            List<Cadete> cadetes = new List<Cadete>();
-            string[] lineas = File.ReadAllLines(rutaCadetes);
-            foreach (var linea in lineas)
+            string[] lineas = File.ReadAllLines(ruta);
+            foreach (string linea in lineas)
             {
                 string[] datos = linea.Split(",");
-                Cadete cadete = new Cadete(datos[0], datos[1], datos[2]);
-                cadetes.Add(cadete);
+                if (datos.Length >= 2)
+                {
+                    cadeteria = new Cadeteria(datos[0], datos[1], new List<Cadete>());
+                }
+            }
+            if (cadeteria != null)
+            {
+                return cadeteria;
+            }
+            else
+            {
+                throw new Exception("No se pudo cargar la cadetería, archivo vacío o datos incompletos.");
+            }
+        }
+        catch (System.Exception e)
+        {
+            Console.WriteLine(e.Message);
+            throw;
+        }
+    }
+    public override List<Cadete> CargarCadetes(string nombreArchivo)
+    {
+        List<Cadete> cadetes = new List<Cadete>();
+        string ruta = Path.Combine("archivos", nombreArchivo);
+        try
+        {
+            string[] lineas = File.ReadAllLines(ruta);
+            foreach (string linea in lineas)
+            {
+                string[] datos = linea.Split(",");
+                if (datos.Length >= 3)
+                {
+                    cadetes.Add(new Cadete(datos[0], datos[1], datos[2]));
+                }
             }
             return cadetes;
         }
+        catch (System.Exception e)
+        {
+            Console.WriteLine(e.Message);
+            throw;
+        }
+    }
+}
 
-
+public class AccesoJSON : AccesoADatos
+{
+    public override Cadeteria CargarCadeteria(string nombreArchivo)
+    {
+        try
+        {
+            string ruta = Path.Combine("archivos", nombreArchivo);
+            string json = File.ReadAllText(ruta);
+            Cadeteria cadeteria = JsonSerializer.Deserialize<Cadeteria>(json);
+            return cadeteria;
+        }
+        catch
+        {
+            Console.WriteLine("No se pudo cargar los datos de cadeteria");
+        }
+        return null;
     }
 
-    public class AccesoJSON : AccesoADatos
+    public override List<Cadete> CargarCadetes(string nombreArchivo)
     {
-        private string rutaCadeteria;
-        private string rutaCadetes;
-
-        public AccesoJSON(string rutaCadeteria, string rutaCadetes)
+        try
         {
-            this.rutaCadeteria = rutaCadeteria;
-            this.rutaCadetes = rutaCadetes;
+            string ruta = Path.Combine("archivos", nombreArchivo);
+            string json = File.ReadAllText(ruta);
+            List<Cadete> cadetes = JsonSerializer.Deserialize<List<Cadete>>(json);
+            return cadetes;
         }
-
-        public override Cadeteria CargarCadeteria()
+        catch
         {
-            string json = File.ReadAllText(rutaCadeteria);
-            return JsonSerializer.Deserialize<Cadeteria>(json);
+            Console.WriteLine("No se pudo cargar los datos de los cadetes");
         }
-
-        public override List<Cadete> CargarCadetes()
-        {
-            string json = File.ReadAllText(rutaCadetes);
-            return JsonSerializer.Deserialize<List<Cadete>>(json);
-        }
+        return null;
     }
 }

@@ -1,0 +1,12 @@
+[
+    {
+        "nombre": "Lucas",
+        "direccion": "Uruguay 2314",
+        "telefono": "444451231"
+    },
+    {
+        "nombre": "Pablo",
+        "direccion": "Bolivia 2314",
+        "telefono": "444451235"
+    }
+]
